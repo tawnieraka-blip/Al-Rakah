@@ -43,8 +43,6 @@ if (endMinutes <= startMinutes) {
     endMinutes += 24 * 60;
 }
 
-    }
-
     const totalHours =
         (endMinutes - startMinutes) / 60;
 
