@@ -1,1 +1,57 @@
-<script src="js/booking.js"></script>
+// رابط Google Apps Script
+const API_URL = "ضع هنا رابط Apps Script /exec";
+
+const team = document.getElementById("team");
+const bookingDate = document.getElementById("bookingDate");
+const checkIn = document.getElementById("checkIn");
+const hours = document.getElementById("hours");
+const amount = document.getElementById("amount");
+
+// حساب المبلغ تلقائياً
+hours.addEventListener("input", () => {
+    const pricePerHour = 150;
+    amount.value = hours.value ? hours.value * pricePerHour : "";
+});
+
+// حفظ الحجز
+function saveBooking(){
+
+    if(
+        team.value.trim()==="" ||
+        bookingDate.value==="" ||
+        checkIn.value==="" ||
+        hours.value==="" ||
+        amount.value===""){
+        alert("يرجى إدخال جميع البيانات");
+        return;
+    }
+
+    const day = new Date(bookingDate.value)
+        .toLocaleDateString("ar-SA",{weekday:"long"});
+
+    fetch(API_URL,{
+        method:"POST",
+        body:JSON.stringify({
+            team:team.value,
+            bookingDate:bookingDate.value,
+            day:day,
+            checkIn:checkIn.value,
+            hours:hours.value,
+            amount:amount.value
+        })
+    })
+    .then(r=>r.json())
+    .then(()=>{
+        alert("✅ تم حفظ الحجز بنجاح");
+
+        team.value="";
+        bookingDate.value="";
+        checkIn.value="";
+        hours.value="";
+        amount.value="";
+    })
+    .catch(()=>{
+        alert("❌ حدث خطأ أثناء الحفظ");
+    });
+
+}
