@@ -35,16 +35,13 @@ function calculateBooking() {
         Number(start[0]) * 60 +
         Number(start[1]);
 
-    const endMinutes =
-        Number(end[0]) * 60 +
-        Number(end[1]);
+    let endMinutes =
+    Number(end[0]) * 60 +
+    Number(end[1]);
 
-    if (endMinutes <= startMinutes) {
-
-        hours.value = "";
-        amount.value = "";
-
-        return;
+if (endMinutes <= startMinutes) {
+    endMinutes += 24 * 60;
+}
 
     }
 
