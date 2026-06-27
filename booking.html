@@ -51,13 +51,53 @@ id="bookingDate">
 
 <label>
 <i class="fa-solid fa-clock"></i>
-وقت الدخول
+وقت البداية
 </label>
 
 <input
 type="time"
-id="checkIn"
+id="startTime"
 step="1800">
+
+<label>
+<i class="fa-solid fa-clock"></i>
+وقت النهاية
+</label>
+
+<input
+type="time"
+id="endTime"
+step="1800">
+
+<label>
+<i class="fa-solid fa-money-bill-wave"></i>
+سعر الساعة
+</label>
+
+<input
+type="number"
+id="hourPrice"
+value="150">
+
+<label>
+<i class="fa-solid fa-percent"></i>
+الخصم
+</label>
+
+<input
+type="number"
+id="discount"
+value="0">
+
+<label>
+<i class="fa-solid fa-plus"></i>
+الإضافة
+</label>
+
+<input
+type="number"
+id="extra"
+value="0">
 
 <label>
 <i class="fa-solid fa-hourglass-half"></i>
@@ -67,19 +107,29 @@ step="1800">
 <input
 type="number"
 id="hours"
-min="1"
-max="6"
-placeholder="مثال : 2">
+readonly>
 
 <label>
-<i class="fa-solid fa-money-bill-wave"></i>
-المبلغ
+<i class="fa-solid fa-money-check-dollar"></i>
+المبلغ النهائي
 </label>
 
 <input
 type="number"
 id="amount"
-placeholder="يحسب تلقائياً">
+readonly>
+
+<label>
+<i class="fa-solid fa-note-sticky"></i>
+ملاحظات
+</label>
+
+<textarea
+id="notes"
+rows="4"
+placeholder="أي ملاحظات إضافية"></textarea>
+
+<br><br>
 
 <button
 class="btn"
