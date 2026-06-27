@@ -1,55 +1,76 @@
-// رابط Google Apps Script
-const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec";
+// ===============================
+// إعدادات النظام
+// ===============================
+
+const API_URL = "https://script.google.com/macros/s/AKfycbw9qpPSjaZs3JX5BXLqElB7hOnbr8Ro7crCA-V0XMoSjffvfMdsTdfTcZbRKP2fpCVwYg/exec";
+
 const team = document.getElementById("team");
 const bookingDate = document.getElementById("bookingDate");
-const checkIn = document.getElementById("checkIn");
+
+const startTime = document.getElementById("startTime");
+const endTime = document.getElementById("endTime");
+
+const hourPrice = document.getElementById("hourPrice");
+const discount = document.getElementById("discount");
+const extra = document.getElementById("extra");
+
 const hours = document.getElementById("hours");
 const amount = document.getElementById("amount");
 
-// حساب المبلغ تلقائياً
-hours.addEventListener("input", () => {
-    const pricePerHour = 150;
-    amount.value = hours.value ? hours.value * pricePerHour : "";
-});
+const notes = document.getElementById("notes");
 
-// حفظ الحجز
-function saveBooking(){
+// ===============================
+// حساب عدد الساعات والمبلغ
+// ===============================
 
-    if(
-        team.value.trim()==="" ||
-        bookingDate.value==="" ||
-        checkIn.value==="" ||
-        hours.value==="" ||
-        amount.value===""){
-        alert("يرجى إدخال جميع البيانات");
+function calculateBooking() {
+
+    if (!startTime.value || !endTime.value)
         return;
+
+    const start = startTime.value.split(":");
+    const end = endTime.value.split(":");
+
+    const startMinutes =
+        Number(start[0]) * 60 +
+        Number(start[1]);
+
+    const endMinutes =
+        Number(end[0]) * 60 +
+        Number(end[1]);
+
+    if (endMinutes <= startMinutes) {
+
+        hours.value = "";
+        amount.value = "";
+
+        return;
+
     }
 
-    const day = new Date(bookingDate.value)
-        .toLocaleDateString("ar-SA",{weekday:"long"});
+    const totalHours =
+        (endMinutes - startMinutes) / 60;
 
-    fetch(API_URL,{
-        method:"POST",
-        body:JSON.stringify({
-            team:team.value,
-            bookingDate:bookingDate.value,
-            day:day,
-            checkIn:checkIn.value,
-            hours:hours.value,
-            amount:amount.value
-        })
-    })
-   .then(r => r.text())
-.then(data => {
-    console.log(data);
+    hours.value = totalHours;
 
-    alert("✅ تم حفظ الحجز بنجاح");
+    const total =
+        (totalHours * Number(hourPrice.value))
+        - Number(discount.value)
+        + Number(extra.value);
 
-    team.value="";
-    bookingDate.value="";
-    checkIn.value="";
-    hours.value="";
-    amount.value="";
-})
+    amount.value = total;
 
 }
+
+// ===============================
+// الأحداث
+// ===============================
+
+startTime.addEventListener("change", calculateBooking);
+endTime.addEventListener("change", calculateBooking);
+
+hourPrice.addEventListener("input", calculateBooking);
+
+discount.addEventListener("input", calculateBooking);
+
+extra.addEventListener("input", calculateBooking);
