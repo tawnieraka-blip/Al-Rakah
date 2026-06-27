@@ -39,18 +39,17 @@ function saveBooking(){
             amount:amount.value
         })
     })
-    .then(r=>r.json())
-    .then(()=>{
-        alert("✅ تم حفظ الحجز بنجاح");
+   .then(r => r.text())
+.then(data => {
+    console.log(data);
 
-        team.value="";
-        bookingDate.value="";
-        checkIn.value="";
-        hours.value="";
-        amount.value="";
-    })
-    .catch(()=>{
-        alert("❌ حدث خطأ أثناء الحفظ");
-    });
+    alert("✅ تم حفظ الحجز بنجاح");
+
+    team.value="";
+    bookingDate.value="";
+    checkIn.value="";
+    hours.value="";
+    amount.value="";
+})
 
 }
