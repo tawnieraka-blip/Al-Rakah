@@ -1,29 +1,27 @@
-document.addEventListener("DOMContentLoaded", function () {
+const calendarEl = document.getElementById("calendar");
 
-    const calendarEl = document.getElementById("calendar");
+const calendar = new FullCalendar.Calendar(calendarEl, {
 
-    const calendar = new FullCalendar.Calendar(calendarEl, {
+    locale: "ar",
 
-        locale: "ar",
+    direction: "rtl",
 
-        direction: "rtl",
+    initialView: "dayGridMonth",
 
-        initialView: "dayGridMonth",
+    height: "auto",
 
-        headerToolbar: {
-            left: "prev,next today",
-            center: "title",
-            right: ""
-        },
+    headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: ""
+    },
 
-        buttonText: {
-            today: "اليوم"
-        },
+    buttonText: {
+        today: "اليوم"
+    },
 
-        events: []
-
-    });
-
-    calendar.render();
+    events: []
 
 });
+
+calendar.render();
