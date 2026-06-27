@@ -45,8 +45,11 @@ if (endMinutes <= startMinutes) {
 
     const totalHours =
         (endMinutes - startMinutes) / 60;
+        
+hours.value = totalHours;
 
-    hours.value = totalHours;
+console.log("عدد الساعات:", totalHours);
+    
 
     const total =
         (totalHours * Number(hourPrice.value))
