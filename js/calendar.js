@@ -1,27 +1,55 @@
-const calendarEl = document.getElementById("calendar");
+const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec";
 
-const calendar = new FullCalendar.Calendar(calendarEl, {
+fetch(API_URL)
+.then(response => response.json())
+.then(data => {
 
-    locale: "ar",
+    const events = data.map(row => {
 
-    direction: "rtl",
+        return {
 
-    initialView: "dayGridMonth",
+            title: row[0] + " - " + row[3],
 
-    height: "auto",
+            start: row[1] + "T" + row[3],
 
-    headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: ""
-    },
+            allDay: false
 
-    buttonText: {
-        today: "اليوم"
-    },
+        };
 
-    events: []
+    });
+
+    const calendarEl = document.getElementById("calendar");
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+
+        locale: "ar",
+
+        direction: "rtl",
+
+        initialView: "dayGridMonth",
+
+        height: "auto",
+
+        headerToolbar: {
+
+            left: "prev,next today",
+
+            center: "title",
+
+            right: ""
+
+        },
+
+        buttonText: {
+
+            today: "اليوم"
+
+        },
+
+        events: events
+
+    });
+
+    calendar.render();
 
 });
-
-calendar.render();
