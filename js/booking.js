@@ -1,6 +1,5 @@
 // رابط Google Apps Script
-const API_URL = "ضع هنا رابط Apps Script /exec";
-
+const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec";
 const team = document.getElementById("team");
 const bookingDate = document.getElementById("bookingDate");
 const checkIn = document.getElementById("checkIn");
