@@ -36,9 +36,11 @@ fetch(API_URL)
 
     <br>
 
-    <button class="btn delete-btn" onclick="deleteBooking(${row[0]})">
+  <div style="margin-top:15px;">
+    <button onclick="deleteBooking(${row[0]})">
         🗑 حذف
     </button>
+</div>
 `;
 
         container.appendChild(card);
