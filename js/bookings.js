@@ -21,26 +21,18 @@ fetch(API_URL)
         const card = document.createElement("div");
         card.className = "booking-card";
 
-       card.innerHTML = `
-    <h3>${row[1]}</h3>
+card.innerHTML = `
+    <h3>${row[0]}</h3>
 
-    <p>📅 <strong>التاريخ:</strong> ${row[2]}</p>
+    <p>📅 <strong>التاريخ:</strong> ${row[1]}</p>
 
-    <p>📆 <strong>اليوم:</strong> ${row[3]}</p>
+    <p>📆 <strong>اليوم:</strong> ${row[2]}</p>
 
-    <p>🕒 <strong>وقت الدخول:</strong> ${row[4]}</p>
+    <p>🕒 <strong>وقت الدخول:</strong> ${row[3]}</p>
 
-    <p>⏳ <strong>عدد الساعات:</strong> ${row[5]}</p>
+    <p>⏳ <strong>عدد الساعات:</strong> ${row[4]}</p>
 
-    <p>💰 <strong>المبلغ:</strong> ${row[6]} ريال</p>
-
-    <br>
-
-  <div style="margin-top:15px;">
-    <button onclick="deleteBooking(${row[0]})">
-        🗑 حذف
-    </button>
-</div>
+    <p>💰 <strong>المبلغ:</strong> ${row[5]} ريال</p>
 `;
 
         container.appendChild(card);
@@ -60,13 +52,3 @@ fetch(API_URL)
     console.log(error);
 
 });
-
-function deleteBooking(row) {
-
-    if (!confirm("هل أنت متأكد من حذف هذا الحجز؟")) {
-        return;
-    }
-
-    alert("تم اختيار الصف رقم: " + row);
-
-}
