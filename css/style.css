@@ -354,3 +354,163 @@ label{
 }
 
 }
+/* ===========================
+   تصميم جديد لبطاقات الحجوزات
+=========================== */
+
+#bookingsContainer{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    margin-top:25px;
+}
+
+.booking-card{
+    background:#ffffff;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    position:relative;
+    overflow:hidden;
+    transition:.3s;
+    border:1px solid #e7e7e7;
+}
+
+.booking-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.booking-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    right:0;
+
+    top:0;
+
+    width:8px;
+
+    height:100%;
+
+    background:#0b57d0;
+
+}
+
+.booking-card h3{
+
+    color:#0b57d0;
+
+    font-size:26px;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+.booking-card p{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#f6f8fc;
+
+    border-radius:12px;
+
+    padding:12px 15px;
+
+    margin:12px 0;
+
+    font-size:17px;
+
+}
+
+.booking-card strong{
+
+    color:#444;
+
+}
+
+.booking-card p:nth-child(6){
+
+    background:#eef7ee;
+
+    color:#0a8f35;
+
+    font-weight:bold;
+
+}
+
+.booking-card p:nth-child(7){
+
+    background:#fff8e8;
+
+    color:#d88900;
+
+    font-weight:bold;
+
+}
+
+.booking-card .details-btn{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:14px;
+
+    margin-top:18px;
+
+    background:#0b57d0;
+
+    color:#fff;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+}
+
+.booking-card .details-btn:hover{
+
+    background:#0846a8;
+
+}
+
+@media(max-width:768px){
+
+    #bookingsContainer{
+
+        gap:18px;
+
+    }
+
+    .booking-card{
+
+        padding:18px;
+
+        border-radius:18px;
+
+    }
+
+    .booking-card h3{
+
+        font-size:22px;
+
+    }
+
+    .booking-card p{
+
+        font-size:15px;
+
+    }
+
+}
