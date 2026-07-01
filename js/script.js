@@ -1,11 +1,11 @@
 // =====================================================
-// FRONTEND LOGIC (GitHub Pages)
+// FRONTEND LOGIC (GitHub Pages) - ملعب جمعية الراكة
 // =====================================================
 
-// ⚠️ استبدل الرابط اللي تحت ده فوراً بالرابط الجديد اللي نسخته من الـ Apps Script
-const API_URL = https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec; 
+// الرابط الخاص بـ Web App من Google Apps Script
+const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cy8XMLBz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec"; 
 
-// دالة موحدة لإرسال الطلبات للسيرفر
+// دالة موحدة لإرسال واستقبال البيانات من السيرفر
 async function sendRequest(action, data = {}) {
     try {
         const response = await fetch(API_URL, {
@@ -21,104 +21,110 @@ async function sendRequest(action, data = {}) {
     }
 }
 
-// عند تحميل الصفحة بالكامل
+// تشغيل الدوال بمجرد تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
+    // جلب الإحصائيات لو كنا في الصفحة الرئيسية أو صفحة الإحصائيات
     loadDashboardStats();
-    loadPendingBookings();
+    
+    // جلب وعرض الكروت لو كنا في صفحة عرض الحجوزات
+    loadBookingsCards();
 
-    // ربط استمارة الحجز
+    // ربط استمارة الحجز الجديد لو موجودة بالصفحة
     const form = document.getElementById("bookingForm");
     if (form) {
         form.addEventListener("submit", handleFormSubmit);
     }
 });
 
-// معالجة إرسال الفورم لحفظ حجز جديد
+// 1. جلب البيانات وعرضها داخل "كروت الإحصائيات الفخمة" الخاصة بك
+async function loadDashboardStats() {
+    const res = await sendRequest("getStats");
+    if (res) {
+        // البحث عن قيم الإحصائيات في واجهتك الأصلية وتحديثها
+        const elements = document.querySelectorAll('.stat-card h2, .card h2, .stats-container p, .stats-grid p');
+        
+        // إذا كانت العناصر موجودة، نقوم بتحديثها بناءً على الترتيب أو الـ IDs
+        if(document.getElementById("totalBookings")) document.getElementById("totalBookings").innerText = res.bookings || 0;
+        if(document.getElementById("totalHours")) document.getElementById("totalHours").innerText = res.hours || 0;
+        if(document.getElementById("totalRevenue")) document.getElementById("totalRevenue").innerText = (res.revenue || 0) + " ريال";
+        
+        // تحديث كروت الإحصائيات الأصلية بناءً على محتوى النصوص المصاحبة لها في تصميمك
+        document.querySelectorAll('.card, .stat-card').forEach(card => {
+            const title = card.innerText;
+            const valueElement = card.querySelector('p') || card.querySelector('h2') || card.querySelector('.stat-value');
+            if (valueElement) {
+                if (title.includes("إجمالي الحجوزات")) valueElement.innerText = res.bookings;
+                if (title.includes("إجمالي الساعات")) valueElement.innerText = res.hours;
+                if (title.includes("إجمالي الإيرادات") || title.includes("الدخل")) valueElement.innerText = res.revenue + " ريال";
+            }
+        });
+    }
+}
+
+// 2. بناء "كروت الحجوزات" ديناميكياً بنفس تصميمك المبهر دون جداول
+async function loadBookingsCards() {
+    // البحث عن الحاوية الأصلية للكروت في صفحة عرض الحجوزات (تلقائياً حسب تصميمك)
+    const container = document.querySelector('.bookings-grid') || document.querySelector('.container-cards') || document.getElementById('bookingsContainer');
+    if (!container) return;
+
+    container.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>جاري تحميل الحجوزات الحالية...</p>";
+
+    // جلب الحجوزات المعلقة والمؤكدة لعرضها
+    const pending = await sendRequest("getPending") || [];
+    const confirmed = await sendRequest("getConfirmed") || [];
+    const allBookings = [...pending, ...confirmed];
+
+    container.innerHTML = ""; // تفريغ الحاوية
+
+    if (allBookings.length === 0) {
+        container.innerHTML = "<p style='text-align:center; grid-column: 1/-1;'>لا توجد حجوزات مسجلة حالياً</p>";
+        return;
+    }
+
+    // بناء الكروت بنفس الهيكل والأيقونات والألوان اللي اخترتها في الحجوزات.png
+    allBookings.forEach(row => {
+        const card = document.createElement("div");
+        card.className = "booking-card"; // يقرأ كلاس التنسيق الأصلي الخاص بك من ملف الـ CSS
+        
+        // كود الـ HTML الخاص بالكارت الأصلي مع تعبئة البيانات ديناميكياً
+        card.innerHTML = `
+            <div class="card-header">
+                <h3>${row[0]}</h3>
+            </div>
+            <div class="card-body">
+                <p>🗓️ <strong>التاريخ:</strong> ${row[1]}</p>
+                <p>📅 <strong>اليوم:</strong> ${row[2]}</p>
+                <p>🕒 <strong>وقت الدخول:</strong> ${row[3]}</p>
+                <p>⏳ <strong>عدد الساعات:</strong> ${row[4]}</p>
+                <p class="price">💰 <strong>المبلغ:</strong> ${row[5]} ريال</p>
+                <span class="status-badge ${row[6] === 'معلق' ? 'pending' : 'confirmed'}" style="display:inline-block; margin-top:10px; padding:3px 8px; border-radius:4px; font-size:12px; background-color:${row[6] === 'معلق' ? '#ffeeba' : '#d4edda'}; color:${row[6] === 'معلق' ? '#856404' : '#155724'};">
+                    ${row[6]}
+                </span>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// 3. معالجة إرسال الفورم لحفظ حجز جديد (إذا تم استخدامه)
 async function handleFormSubmit(e) {
     e.preventDefault();
     
     const bookingData = {
-        team: document.getElementById("teamName").value,
-        bookingDate: document.getElementById("bookingDate").value,
-        day: document.getElementById("bookingDay").value,
-        checkIn: document.getElementById("checkInTime").value,
-        hours: document.getElementById("bookingHours").value,
-        amount: document.getElementById("bookingAmount").value
+        team: document.getElementById("teamName")?.value || "",
+        bookingDate: document.getElementById("bookingDate")?.value || "",
+        day: document.getElementById("bookingDay")?.value || "",
+        checkIn: document.getElementById("checkInTime")?.value || "",
+        hours: document.getElementById("bookingHours")?.value || "",
+        amount: document.getElementById("bookingAmount")?.value || ""
     };
 
     const res = await sendRequest("add", bookingData);
     if (res.success) {
-        alert(res.message);
+        alert("🎉 " + res.message);
         document.getElementById("bookingForm").reset();
-        // إعادة تحميل البيانات لتحديث الشاشة فوراً
         loadDashboardStats();
-        loadPendingBookings();
     } else {
-        alert("خطأ: " + res.message);
-    }
-}
-
-// جلب وتحديث الإحصائيات في الكروت
-async function loadDashboardStats() {
-    const res = await sendRequest("getStats");
-    if (res && res.bookings !== undefined) {
-        if(document.getElementById("statBookings")) document.getElementById("statBookings").innerText = res.bookings;
-        if(document.getElementById("statHours")) document.getElementById("statHours").innerText = res.hours;
-        if(document.getElementById("statRevenue")) document.getElementById("statRevenue").innerText = res.revenue + " ج.م";
-        if(document.getElementById("statPending")) document.getElementById("statPending").innerText = res.pending;
-    }
-}
-
-// جلب وعرض الحجوزات المعلقة في الجدول
-async function loadPendingBookings() {
-    const tableBody = document.getElementById("pendingBookingsTable");
-    if (!tableBody) return;
-
-    tableBody.innerHTML = "<tr><td colspan='7'>جاري تحميل البيانات...</td></tr>";
-    
-    const bookings = await sendRequest("getPending");
-    tableBody.innerHTML = ""; // تفريغ الجدول
-
-    if (!bookings || bookings.length === 0) {
-        tableBody.innerHTML = "<tr><td colspan='7'>لا توجد حجوزات معلقة حالياً</td></tr>";
-        return;
-    }
-
-    bookings.forEach(row => {
-        // row[7] هو الـ ID الفريد للحجز
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${row[0]}</td>
-            <td>${row[1]}</td>
-            <td>${row[2]}</td>
-            <td>${row[3]}</td>
-            <td>${row[4]}</td>
-            <td>${row[5]} ج.م</td>
-            <td>
-                <button class="btn-confirm" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;" onclick="confirmBookingAction('${row[7]}')">تأكيد</button>
-                <button class="btn-delete" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; margin-right: 5px;" onclick="deleteBookingAction('${row[7]}')">حذف</button>
-            </td>
-        `;
-        tableBody.appendChild(tr);
-    });
-}
-
-// إجراء تأكيد الحجز من الجدول
-async function confirmBookingAction(id) {
-    if(confirm("هل أنت متأكد من تأكيد هذا الحجز؟")) {
-        const res = await sendRequest("confirm", { id: id });
-        alert(res.message);
-        loadDashboardStats();
-        loadPendingBookings();
-    }
-}
-
-// إجراء حذف الحجز من الجدول
-async function deleteBookingAction(id) {
-    if(confirm("هل أنت متأكد من حذف هذا الحجز نهائياً؟")) {
-        const res = await sendRequest("delete", { id: id });
-        alert(res.message);
-        loadDashboardStats();
-        loadPendingBookings();
+        alert("❌ خطأ: " + res.message);
     }
 }
