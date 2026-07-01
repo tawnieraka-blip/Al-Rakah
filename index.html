@@ -3,77 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة حجز ملعب الرقة</title>
+    <title>ملعب جمعية الراكة</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/v5.15.4/css/all.min.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>نظام إدارة حجز ملعب الرقة</h1>
-
-        <div class="stats-container">
-            <div class="card">
-                <h3>الحجوزات المؤكدة</h3>
-                <p id="statBookings">0</p>
-            </div>
-            <div class="card">
-                <h3>الساعات المحجوزة</h3>
-                <p id="statHours">0</p>
-            </div>
-            <div class="card">
-                <h3>إجمالي الدخل</h3>
-                <p id="statRevenue">0 ج.م</p>
-            </div>
-            <div class="card warning">
-                <h3>حجوزات معلقة</h3>
-                <p id="statPending">0</p>
-            </div>
+        <div class="logo-container">
+            <img src="logo.png" alt="شعار جمعية الراكة" class="logo">
         </div>
 
-        <div class="form-section">
-            <h2>إضافة حجز جديد</h2>
-            <form id="bookingForm">
-                <div class="form-group">
-                    <label>اسم الفريق / العميل:</label>
-                    <input type="text" id="teamName" required>
-                </div>
-                <div class="form-group">
-                    <label>تاريخ الحجز:</label>
-                    <input type="date" id="bookingDate" required>
-                </div>
-                <div class="form-group">
-                    <label>اليوم:</label>
-                    <input type="text" id="bookingDay" placeholder="مثال: الجمعة" required>
-                </div>
-                <div class="form-group">
-                    <label>وقت الحضور (Check-In):</label>
-                    <input type="time" id="checkInTime" required>
-                </div>
-                <div class="form-group">
-                    <label>عدد الساعات:</label>
-                    <input type="number" id="bookingHours" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label>المبلغ المتفق عليه:</label>
-                    <input type="number" id="bookingAmount" min="0" required>
-                </div>
-                <button type="submit" class="btn-submit">حفظ الحجز</button>
-            </form>
-        </div>
+        <h1>ملعب جمعية الراكة</h1>
+        <p class="subtitle">نظام إدارة الحجوزات والإحصائيات</p>
 
-        <div class="tables-section">
-            <h2>قائمة الحجوزات المعلقة</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>الفريق</th><th>التاريخ</th><th>اليوم</th><th>الوقت</th><th>الساعات</th><th>المبلغ</th><th>إجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pendingBookingsTable">
-                        </tbody>
-                </table>
-            </div>
+        <div class="main-menu">
+            <a href="add-booking.html" class="menu-card">
+                <div class="icon-container">
+                    <i class="fas fa-calendar-plus"></i>
+                </div>
+                <h3>حجز جديد</h3>
+                <p>إضافة حجز جديد للملعب بسهولة وسرعة.</p>
+            </a>
+
+            <a href="view-bookings.html" class="menu-card">
+                <div class="icon-container">
+                    <i class="fas fa-list-ul"></i>
+                </div>
+                <h3>عرض الحجوزات</h3>
+                <p>عرض جميع الحجوزات في بطاقات مرتبة.</p>
+            </a>
+
+            <a href="stats.html" class="menu-card">
+                <div class="icon-container">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>الإحصائيات</h3>
+                <p>ملخص بياني وحسابي لأداء الملعب.</p>
+            </a>
         </div>
     </div>
 
