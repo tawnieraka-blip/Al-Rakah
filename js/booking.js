@@ -18,13 +18,14 @@ hours.addEventListener("input", () => {
 
 });
 
-
 // =======================================
 // حفظ الحجز
 // =======================================
 
 function saveBooking() {
+
     alert("saveBooking works");
+
     if (
         team.value.trim() === "" ||
         bookingDate.value === "" ||
@@ -34,15 +35,13 @@ function saveBooking() {
     ) {
 
         alert("يرجى إدخال جميع البيانات");
-
         return;
 
     }
 
-    const day = new Date(bookingDate.value)
-        .toLocaleDateString("ar-SA", {
-            weekday: "long"
-        });
+    const day = new Date(bookingDate.value).toLocaleDateString("ar-SA", {
+        weekday: "long"
+    });
 
     fetch(API_URL, {
 
@@ -72,31 +71,13 @@ function saveBooking() {
 
     })
 
-.then(response => response.text())
+    .then(response => response.text())
 
-.then(result => {
+    .then(result => {
 
-    console.log(result);
+        console.log(result);
 
-    alert(result);
-
-})
-
-        if (result.success) {
-
-            alert("✅ تم حفظ الحجز بنجاح");
-
-            team.value = "";
-            bookingDate.value = "";
-            checkIn.value = "";
-            hours.value = "";
-            amount.value = "";
-
-        } else {
-
-            alert(result.message);
-
-        }
+        alert(result);
 
     })
 
@@ -104,7 +85,7 @@ function saveBooking() {
 
         console.log(error);
 
-        alert("حدث خطأ أثناء حفظ الحجز");
+        alert(error);
 
     });
 
