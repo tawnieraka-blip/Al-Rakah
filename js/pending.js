@@ -1,58 +1,111 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec?status=معلق";
+const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec";
+
 const container = document.getElementById("pendingContainer");
 
-fetch(API_URL)
-.then(response => response.json())
-.then(data => {
+loadPendingBookings();
 
-    if (data.length === 0){
+function loadPendingBookings() {
 
-        container.innerHTML = `
-            <div class="booking-card">
-                <h3>🎉 لا توجد حجوزات معلقة</h3>
-            </div>
-        `;
+    fetch(API_URL + "?action=pending")
 
-        return;
-    }
+    .then(response => response.json())
 
-    data.forEach(row=>{
+    .then(data => {
 
-        const card=document.createElement("div");
+        container.innerHTML = "";
 
-        card.className="booking-card";
+        if (data.length === 0) {
 
-        card.innerHTML=`
+            container.innerHTML = `
+                <div class="booking-card">
+                    <h3>🎉 لا توجد حجوزات معلقة</h3>
+                </div>
+            `;
 
-            <h3>⚽ ${row[0]}</h3>
+            return;
+        }
 
-            <p>📅 ${row[1]}</p>
+        data.forEach(row => {
 
-            <p>🗓 ${row[2]}</p>
+            const card = document.createElement("div");
 
-            <p>🕒 البداية : ${row[3]}</p>
+            card.className = "booking-card";
 
-            <p>⏳ ${row[4]} ساعة</p>
+            card.innerHTML = `
 
-            <p>💰 ${row[5]} ريال</p>
+                <h3>⚽ ${row[0]}</h3>
 
-            <p style="color:#d68910;font-weight:bold;">
-                🟡 ${row[6]}
-            </p>
+                <p>📅 ${row[1]}</p>
 
-            <button class="btn confirm-btn">
-                ✅ تأكيد الحضور
-            </button>
+                <p>🗓 ${row[2]}</p>
 
-        `;
+                <p>🕒 البداية : ${row[3]}</p>
 
-        container.appendChild(card);
+                <p>⏳ ${row[4]} ساعة</p>
+
+                <p>💰 ${row[5]} ريال</p>
+
+                <p style="color:#d68910;font-weight:bold;">
+                    🟡 ${row[6]}
+                </p>
+
+                <button class="btn confirm-btn"
+                    onclick="confirmBooking('${row[7]}')">
+
+                    ✅ تأكيد الحضور
+
+                </button>
+
+            `;
+
+            container.appendChild(card);
+
+        });
+
+    })
+
+    .catch(error => {
+
+        console.log(error);
 
     });
 
-})
-.catch(error=>{
+}
 
-    console.log(error);
 
-});
+
+// =====================================
+// تأكيد الحجز
+// =====================================
+
+function confirmBooking(id){
+
+    fetch(API_URL,{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            action:"confirm",
+
+            id:id
+
+        })
+
+    })
+
+    .then(response=>response.json())
+
+    .then(result=>{
+
+        alert(result.message);
+
+        loadPendingBookings();
+
+    });
+
+}
