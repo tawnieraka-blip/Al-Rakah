@@ -1,30 +1,40 @@
+// =====================================================
+// booking.js
+// =====================================================
+
 // رابط Google Apps Script
 const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec";
 
+// عناصر الصفحة
 const team = document.getElementById("team");
 const bookingDate = document.getElementById("bookingDate");
 const checkIn = document.getElementById("checkIn");
 const hours = document.getElementById("hours");
 const amount = document.getElementById("amount");
 
+// سعر الساعة
+const PRICE_PER_HOUR = 150;
+
 // حساب المبلغ تلقائياً
 hours.addEventListener("input", () => {
 
-    const pricePerHour = 150;
+    const totalHours = Number(hours.value);
 
-    amount.value = hours.value
-        ? hours.value * pricePerHour
-        : "";
+    if (!totalHours) {
+        amount.value = "";
+        return;
+    }
+
+    amount.value = totalHours * PRICE_PER_HOUR;
 
 });
 
-// =======================================
+
+// =====================================================
 // حفظ الحجز
-// =======================================
+// =====================================================
 
 function saveBooking() {
-
-    alert("saveBooking works");
 
     if (
         team.value.trim() === "" ||
@@ -39,9 +49,10 @@ function saveBooking() {
 
     }
 
-    const day = new Date(bookingDate.value).toLocaleDateString("ar-SA", {
-        weekday: "long"
-    });
+    const day = new Date(bookingDate.value).toLocaleDateString(
+        "ar-SA",
+        { weekday: "long" }
+    );
 
     fetch(API_URL, {
 
@@ -71,21 +82,33 @@ function saveBooking() {
 
     })
 
-    .then(response => response.text())
+    .then(response => response.json())
 
     .then(result => {
 
-        console.log(result);
+        if (result.success) {
 
-        alert(result);
+            alert("✅ تم حفظ الحجز بنجاح\n\nرقم الحجز : " + result.id);
+
+            team.value = "";
+            bookingDate.value = "";
+            checkIn.value = "";
+            hours.value = "";
+            amount.value = "";
+
+        } else {
+
+            alert(result.message);
+
+        }
 
     })
 
     .catch(error => {
 
-        console.log(error);
+        console.error(error);
 
-        alert(error);
+        alert("حدث خطأ أثناء الاتصال بالسيرفر");
 
     });
 
