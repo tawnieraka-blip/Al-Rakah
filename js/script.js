@@ -3,7 +3,7 @@
 // =====================================================
 
 // ⚠️ استبدل هذا الرابط برابط الـ Web App الخاص بك من Google Apps Script
-const API_URL = "YOUR_WEB_APP_URL_HERE"; 
+const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec"; 
 
 // دالة موحدة لإرسال الطلبات للسيرفر
 async function sendRequest(action, data = {}) {
