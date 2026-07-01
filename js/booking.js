@@ -24,7 +24,7 @@ hours.addEventListener("input", () => {
 // =======================================
 
 function saveBooking() {
-
+    alert("saveBooking works");
     if (
         team.value.trim() === "" ||
         bookingDate.value === "" ||
