@@ -15,8 +15,13 @@ const amount = document.getElementById("amount");
 // سعر الساعة
 const PRICE_PER_HOUR = 150;
 
+// =====================================
 // حساب المبلغ تلقائياً
-hours.addEventListener("input", () => {
+// =====================================
+
+hours.addEventListener("input", calculateAmount);
+
+function calculateAmount() {
 
     const totalHours = Number(hours.value);
 
@@ -27,12 +32,11 @@ hours.addEventListener("input", () => {
 
     amount.value = totalHours * PRICE_PER_HOUR;
 
-});
+}
 
-
-// =====================================================
+// =====================================
 // حفظ الحجز
-// =====================================================
+// =====================================
 
 function saveBooking() {
 
@@ -40,8 +44,7 @@ function saveBooking() {
         team.value.trim() === "" ||
         bookingDate.value === "" ||
         checkIn.value === "" ||
-        hours.value === "" ||
-        amount.value === ""
+        hours.value === ""
     ) {
 
         alert("يرجى إدخال جميع البيانات");
@@ -49,10 +52,10 @@ function saveBooking() {
 
     }
 
-    const day = new Date(bookingDate.value).toLocaleDateString(
-        "ar-SA",
-        { weekday: "long" }
-    );
+    const day = new Date(bookingDate.value)
+        .toLocaleDateString("ar-SA", {
+            weekday: "long"
+        });
 
     fetch(API_URL, {
 
@@ -88,7 +91,7 @@ function saveBooking() {
 
         if (result.success) {
 
-            alert("✅ تم حفظ الحجز بنجاح\n\nرقم الحجز : " + result.id);
+            alert("✅ تم حفظ الحجز بنجاح\nرقم الحجز: " + result.id);
 
             team.value = "";
             bookingDate.value = "";
