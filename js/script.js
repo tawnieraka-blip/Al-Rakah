@@ -2,8 +2,8 @@
 // FRONTEND LOGIC (GitHub Pages)
 // =====================================================
 
-// ⚠️ استبدل هذا الرابط برابط الـ Web App الخاص بك من Google Apps Script
-const API_URL = "https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec"; 
+// ⚠️ استبدل الرابط اللي تحت ده فوراً بالرابط الجديد اللي نسخته من الـ Apps Script
+const API_URL = https://script.google.com/macros/s/AKfycbwdFLVYkFvB_Ir-1eTGXSfAz27cY8XMLBVz3Uz2KuU8ZKtPRg6K27_w9DUPxHf3TIQTag/exec; 
 
 // دالة موحدة لإرسال الطلبات للسيرفر
 async function sendRequest(action, data = {}) {
@@ -95,8 +95,8 @@ async function loadPendingBookings() {
             <td>${row[4]}</td>
             <td>${row[5]} ج.م</td>
             <td>
-                <button class="btn-confirm" onclick="confirmBookingAction('${row[7]}')">تأكيد</button>
-                <button class="btn-delete" onclick="deleteBookingAction('${row[7]}')">حذف</button>
+                <button class="btn-confirm" style="background-color: #28a745; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;" onclick="confirmBookingAction('${row[7]}')">تأكيد</button>
+                <button class="btn-delete" style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px; margin-right: 5px;" onclick="deleteBookingAction('${row[7]}')">حذف</button>
             </td>
         `;
         tableBody.appendChild(tr);
