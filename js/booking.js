@@ -72,9 +72,15 @@ function saveBooking() {
 
     })
 
-    .then(response => response.json())
+.then(response => response.text())
 
-    .then(result => {
+.then(result => {
+
+    console.log(result);
+
+    alert(result);
+
+})
 
         if (result.success) {
 
